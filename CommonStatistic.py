@@ -1,8 +1,10 @@
 import plotly
+plotly.offline.init_notebook_mode()
 import plotly.graph_objs as go
 import plotly.express as px
 from plotly.subplots import make_subplots
 
+from IPython.display import display
 import numpy as np
 import pandas as pd
 import pprint as pp
@@ -41,10 +43,12 @@ def print_statistic(file, div_list):
         if row.Cash // row.Price > 0:
             new_qty = row.Cash // row.Price
             if sum_div == None:
-                result_list.append([row.Date.to_datetime64(), new_qty, 0, 0, row.Price, new_qty])
+                result_list.append([row.Date.to_datetime64(), new_qty, 0, 0, row.Price, new_qty,
+                                    row.Cash - new_qty * row.Price])
             else:
                 result_list.append(
-                    [row.Date.to_datetime64(), row.Qty, sum_div, found_div.Val.values[0] if sum_div > 0 else 0, row.Price, new_qty])
+                    [row.Date.to_datetime64(), row.Qty, sum_div, found_div.Val.values[0] if sum_div > 0 else 0,
+                     row.Price, new_qty, row.Cash - new_qty * row.Price])
                 sum_div = 0
             row.Qty += new_qty
             row.Cash = row.Cash - new_qty * row.Price
@@ -56,13 +60,16 @@ def print_statistic(file, div_list):
         df.loc[index, 'Qty'] = row.Qty
         df.loc[index, 'Cash'] = row.Cash
         prev_row = row
+    result_list.append(
+        [prev_row.Date.to_datetime64(), prev_row.Qty, 0, 0, prev_row.Price, 0, prev_row.Cash])
+
     result_table = pd.DataFrame(result_list,
                                 columns=['Дата', 'Количество акций', 'Общая сумма дивов', 'Дивов на 1 акцию',
                                          'Цена акции',
-                                         'Количество акций новых'])
+                                         'Количество акций новых', 'Остаток денег'])
     pd.set_option('display.max_columns', 20)
     pd.set_option('display.width', 200)
-    print(result_table)
+    display(result_table)
     fig = go.Figure()
     fig.add_trace(go.Scatter(x=df.Date, y=df.AmountNoDiv, name='Сумма без дивидентов'))
     fig.add_trace(go.Scatter(x=df.Date, y=df.Amount, name='Сумма'))
