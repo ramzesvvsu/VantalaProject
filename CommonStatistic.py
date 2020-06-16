@@ -46,7 +46,8 @@ def print_statistic(file, div_list, start_price, end_price):
             last_div = found_div.Date.values[0]
 
         if row.Cash // row.Price > 0 and (sum_div == None or sum_div > 0):
-            new_qty = row.Cash // row.Price
+            #new_qty = row.Cash // row.Price
+            new_qty = round(row.Cash / row.Price, 0)
             if sum_div == None:
                 result_list.append([row.DATE.to_datetime64(), new_qty, 0, 0, row.Price, new_qty,
                                     row.Cash - new_qty * row.Price, row.Cash])
@@ -56,7 +57,8 @@ def print_statistic(file, div_list, start_price, end_price):
                      row.Price, new_qty, row.Cash - new_qty * row.Price, row.Qty * row.Price + row.Cash])
                 sum_div = 0
             row.Qty += new_qty
-            row.Cash = row.Cash - new_qty * row.Price
+            #row.Cash = row.Cash - new_qty * row.Price
+            row.Cash = 0
             if first_qty == 0:
                 first_qty = new_qty
 
@@ -107,26 +109,41 @@ def print_statistic(file, div_list, start_price, end_price):
 
 
 if __name__ == '__main__':
-    start_price = round((86.56 + 88.41) / 2, 2)
-    end_price = round((255.99 + 252.20) / 2, 2)
-    print_statistic('SBER_100101_200101.csv',
-                    pd.DataFrame.from_dict({'Date': ['13.06.2019',
-                                                     '26.06.2018',
-                                                     '14.06.2017',
-                                                     '14.06.2016',
-                                                     '15.06.2015',
-                                                     '17.06.2014',
-                                                     '11.04.2013',
-                                                     '12.04.2012',
-                                                     '15.04.2011',
-                                                     '16.04.2010'], 'Val': [16.00,
-                                                                            12.00,
-                                                                            6.00,
-                                                                            1.97,
-                                                                            0.45,
-                                                                            3.20,
-                                                                            3.20,
-                                                                            2.59,
-                                                                            1.15,
-                                                                            0.45
-                                                                            ]}), start_price, end_price)
+    start_price = round((1744.3 + 1687.6) / 2, 2)
+    end_price = round((6203.5 + 6550.5) / 2, 2)
+    print_statistic('LKOH_100101_200101.csv', pd.DataFrame.from_dict({'Date': ['20.12.2019',
+                                                                               '09.06.2019',
+                                                                               '21.12.2018',
+                                                                               '11.06.2018',
+                                                                               '22.12.2017',
+                                                                               '10.06.2017',
+                                                                               '23.12.2016',
+                                                                               '12.06.2016',
+                                                                               '24.12.2015',
+                                                                               '14.06.2015',
+                                                                               '26.12.2014',
+                                                                               '15.06.2014',
+                                                                               '15.08.2013',
+                                                                               '13.05.2013',
+                                                                               '12.11.2012',
+                                                                               '11.05.2012',
+                                                                               '6.05.2011',
+                                                                               '7.05.2010'], 'Val': [192.00,
+                                                                                                     155.00,
+                                                                                                     95.00,
+                                                                                                     130.00,
+                                                                                                     85.00,
+                                                                                                     120.00,
+                                                                                                     75.00,
+                                                                                                     112.00,
+                                                                                                     65.00,
+                                                                                                     94.00,
+                                                                                                     60.00,
+                                                                                                     60.00,
+                                                                                                     50.00,
+                                                                                                     50.00,
+                                                                                                     40.00,
+                                                                                                     75.00,
+                                                                                                     59.00,
+                                                                                                     52.00]}),
+                    start_price, end_price)
