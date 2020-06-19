@@ -11,7 +11,7 @@ import pandas as pd
 import pprint as pp
 
 
-def print_statistic(file, div_list, start_price, end_price):
+def print_statistic(file, div_list, start_price, end_price, start_money = 100000):
     df = pd.read_csv(file, names=['DATE', 'TIME', 'OPEN', 'HIGH', 'LOW', 'CLOSE', 'VOL'])
     df.drop(['LOW', 'TIME', 'HIGH', 'VOL'], axis=1, inplace=True)
     df.DATE = pd.to_datetime(df.DATE, dayfirst=True)
@@ -27,7 +27,7 @@ def print_statistic(file, div_list, start_price, end_price):
     df['Amount'] = 0
     df['AmountNoDiv'] = 0
     df['Cash'] = 0
-    df.loc[0, 'Cash'] = 100000
+    df.loc[0, 'Cash'] = start_money
     df.loc[0, 'Price'] = start_price
     last_div = None
     prev_row = None
@@ -109,41 +109,8 @@ def print_statistic(file, div_list, start_price, end_price):
 
 
 if __name__ == '__main__':
-    start_price = round((1744.3 + 1687.6) / 2, 2)
-    end_price = round((6203.5 + 6550.5) / 2, 2)
-    print_statistic('LKOH_100101_200101.csv', pd.DataFrame.from_dict({'Date': ['20.12.2019',
-                                                                               '09.06.2019',
-                                                                               '21.12.2018',
-                                                                               '11.06.2018',
-                                                                               '22.12.2017',
-                                                                               '10.06.2017',
-                                                                               '23.12.2016',
-                                                                               '12.06.2016',
-                                                                               '24.12.2015',
-                                                                               '14.06.2015',
-                                                                               '26.12.2014',
-                                                                               '15.06.2014',
-                                                                               '15.08.2013',
-                                                                               '13.05.2013',
-                                                                               '12.11.2012',
-                                                                               '11.05.2012',
-                                                                               '6.05.2011',
-                                                                               '7.05.2010'], 'Val': [192.00,
-                                                                                                     155.00,
-                                                                                                     95.00,
-                                                                                                     130.00,
-                                                                                                     85.00,
-                                                                                                     120.00,
-                                                                                                     75.00,
-                                                                                                     112.00,
-                                                                                                     65.00,
-                                                                                                     94.00,
-                                                                                                     60.00,
-                                                                                                     60.00,
-                                                                                                     50.00,
-                                                                                                     50.00,
-                                                                                                     40.00,
-                                                                                                     75.00,
-                                                                                                     59.00,
-                                                                                                     52.00]}),
-                    start_price, end_price)
+    start_price = round((5400 + 5494) / 2)
+    end_price = round((11650 + 10919) / 2)
+    print_statistic('PLZL_190101_200618.csv', pd.DataFrame.from_dict({'Date': ['14.05.2019', '10.10.2019',
+                                                                               ], 'Val': [143.62, 162.98]}),
+                    start_price, end_price, 50000)
